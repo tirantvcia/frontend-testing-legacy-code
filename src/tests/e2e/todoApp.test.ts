@@ -73,7 +73,7 @@ describe('TodoList App', () => {
     
   })
 
-  xit('should be able to update a todo, miguel version', () => {
+  it('should be able to update a todo, miguel version', () => {
     cy.get('.todo-input').type(todoText);
     cy.get('.add-todo-button').click();
 
