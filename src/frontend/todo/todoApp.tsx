@@ -157,7 +157,7 @@ export class TodoApp extends React.Component {
             })
     }
 
-    toggleComplete = index =>{
+    toggleComplete = index => {
         this.todoList[index].completed = !this.todoList[index].completed;
         fetch(`http://localhost:3000/api/todos/${this.todoList[index].id}`, {
             method: 'PUT',
@@ -235,46 +235,63 @@ export class TodoApp extends React.Component {
                     <button className="todo-button completed-filter" onClick={this.setFilter.bind(this, 'completed')}>Completed</button>
                     <button className="todo-button incomplete-filter" onClick={this.setFilter.bind(this, 'incomplete')}>Incomplete</button>
                 </div>
-                {todosToShow.map((todo, index) => (
-                    this.todoItem(index, 
-                        todo, 
-                        this.todoUpdatingStatus, 
-                        this.handleUpdateInputChange, 
-                        this.onEdit,
-                        this.toggleComplete,
-                        this.deleteTodo,
-                        this.updateTodo)
-                ))}
-            </div>
+                {todosToShow.map((todo, index) => 
+
+                    <TodoItem index={index} 
+                        todo = {todo}
+                        todoUpdatingStatuses = {this.todoUpdatingStatus}
+                        handleUpdateTextChange = {this.handleUpdateInputChange}
+                        onEdit = {this.onEdit}
+                        toggleComplete = {this.toggleComplete}
+                        deleteTodo = {this.deleteTodo}
+                        updateTodo = {this.updateTodo}/>
+                )}
+                
+                </div>
         );
     }
 
-    private todoItem(index: number,
-        todo: Todo,
-        todoUpdatingStatuses: boolean[],
-        handleUpdateTextChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-        onEdit: (index: number, text: string) => void, 
-        toggleComplete: (index: number) => void, 
-        deleteTodo: (index: number) => void, 
-        updateTodo: (index: number) => void, 
-    ): React.JSX.Element {
-        return <div className="todo-list-item">
-            {this.todoUpdatingStatus[index]
-                ? <input
-                    className="todo-edit-input"
-                    defaultValue={todo.text} // Asumiendo que inputData se usa para la edición
-                    onChange={handleUpdateTextChange} />
-                : <p className="todo-text" style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>{todo.text} <button className="todo-button edit-todo-button" onClick={() => onEdit(index, todo.text)}>Edit</button></p>}
-            <button className="todo-button todo-mark-button" onClick={() => toggleComplete(index)}>
-                {todo.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
-            </button>
-            <button className="todo-button todo-delete-button" onClick={()=>deleteTodo(index)}>
-                Delete Todo
-            </button>
 
-            <button className="todo-button todo-update-button" onClick={()=>updateTodo(index)}>
-                Update Todo
-            </button>
-        </div>;
-    }
+}
+
+type TodoItemProps = {
+    index: number,
+    todo: Todo,
+    todoUpdatingStatuses: boolean[],
+    handleUpdateTextChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    onEdit: (index: number, text: string) => void,
+    toggleComplete: (index: number) => void,
+    deleteTodo: (index: number) => void,
+    updateTodo: (index: number) => void,
+}
+
+function TodoItem({
+    index,
+    todo,
+    todoUpdatingStatuses,
+    handleUpdateTextChange,
+    onEdit,
+    toggleComplete,
+    deleteTodo,
+    updateTodo
+}: TodoItemProps
+): React.JSX.Element {
+    return <div className="todo-list-item">
+        {this.todoUpdatingStatus[index]
+            ? <input
+                className="todo-edit-input"
+                defaultValue={todo.text} // Asumiendo que inputData se usa para la edición
+                onChange={handleUpdateTextChange} />
+            : <p className="todo-text" style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>{todo.text} <button className="todo-button edit-todo-button" onClick={() => onEdit(index, todo.text)}>Edit</button></p>}
+        <button className="todo-button todo-mark-button" onClick={() => toggleComplete(index)}>
+            {todo.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
+        </button>
+        <button className="todo-button todo-delete-button" onClick={() => deleteTodo(index)}>
+            Delete Todo
+        </button>
+
+        <button className="todo-button todo-update-button" onClick={() => updateTodo(index)}>
+            Update Todo
+        </button>
+    </div>;
 }
