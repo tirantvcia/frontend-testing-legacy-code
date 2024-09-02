@@ -10,7 +10,7 @@ describe('TodoList App', () => {
     cy.contains('h1', 'TODOLIST APP');
   });
 
-  xit('should be able to add a new todo', () => {
+  it('should be able to add a new todo', () => {
     cy.get('.todo-input').type(todoText);
     cy.get('.add-todo-button').click();
     cy.contains('.todo-list-item', todoText).should('exist');
@@ -19,7 +19,7 @@ describe('TodoList App', () => {
     cy.contains('.todo-list-item', todoText).should('not.exist');
   })
 
-  xit('should be able to delete a todo', () => {
+  it('should be able to delete a todo', () => {
     cy.get('.todo-input').type(todoText);
     cy.get('.add-todo-button').click();
     cy.contains('.todo-list-item', todoText).should('exist');
@@ -28,7 +28,7 @@ describe('TodoList App', () => {
     cy.contains('.todo-list-item', todoText).should('not.exist');
   })
 
-  xit('should be able to mark a todo as complete', () => {
+  it('should be able to mark a todo as complete', () => {
     cy.get('.todo-input').type(todoText);
     cy.get('.add-todo-button').click();
 
@@ -40,7 +40,7 @@ describe('TodoList App', () => {
     cy.contains('.todo-list-item', todoText).should('not.exist');
   })
 
-  xit('should be able to filter by status', () => {
+  it('should be able to filter by status', () => {
     cy.get('.todo-input').type(todoText);
     cy.get('.add-todo-button').click();
     cy.get('.todo-mark-button').click();
