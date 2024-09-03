@@ -12,7 +12,7 @@ type TodoItemProps = {
     updateTodo: (index: number) => void,
 }
 
-function TodoItem({
+export function TodoItem({
     index,
     todo,
     todoUpdatingStatuses,
@@ -24,7 +24,7 @@ function TodoItem({
 }: TodoItemProps
 ): React.JSX.Element {
     return <div className="todo-list-item">
-        {this.todoUpdatingStatus[index]
+        {    todoUpdatingStatuses[index]
             ? <input
                 className="todo-edit-input"
                 defaultValue={todo.text} // Asumiendo que inputData se usa para la edición
