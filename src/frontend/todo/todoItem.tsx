@@ -31,11 +31,9 @@ export function TodoItem({
     const [state, setState] = React.useState<TodoItemState>({ newText: '', isEditing: false });
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setState({ ...state, newText: event.target.value });
-        handleUpdateTextChange(event);
-    }
+     }
     const handleEdit = (): void => {
         setState({ ...state, isEditing: true });
-        onEdit(index, todo.text);
     }
     const handleUpdate = (): void => {
         setState({...state, isEditing: false});
@@ -46,7 +44,8 @@ export function TodoItem({
 
 
     return <div className="todo-list-item">
-        {    todoUpdatingStatuses[index]
+        {    
+        state.isEditing
             ? <input
                 className="todo-edit-input"
                 defaultValue={todo.text} // Asumiendo que inputData se usa para la edición
