@@ -49,7 +49,7 @@ export function TodoItem({
             ? <input
                 className="todo-edit-input"
                 defaultValue={todo.text} // Asumiendo que inputData se usa para la edición
-                onChange={handleUpdateTextChange} />
+                onChange={handleTextChange} />
             : <p className="todo-text" style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>{todo.text} <button className="todo-button edit-todo-button" onClick={handleEdit}>Edit</button></p>}
         <button className="todo-button todo-mark-button" onClick={() => toggleComplete(index)}>
             {todo.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
