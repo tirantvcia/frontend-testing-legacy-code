@@ -12,6 +12,11 @@ type TodoItemProps = {
     updateTodo: (index: number) => void,
 }
 
+type TodoItemState = {
+    newText: string,
+    isEditing: boolean
+}
+
 export function TodoItem({
     index,
     todo,
@@ -23,6 +28,23 @@ export function TodoItem({
     updateTodo
 }: TodoItemProps
 ): React.JSX.Element {
+    const [state, setState] = React.useState<TodoItemState>({ newText: '', isEditing: false });
+    const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        setState({ ...state, newText: event.target.value });
+        handleUpdateTextChange(event);
+    }
+    const handleEdit = (): void => {
+        setState({ ...state, isEditing: true });
+        onEdit(index, todo.text);
+    }
+    const handleUpdate = (): void => {
+        setState({...state, isEditing: false});
+        updateTodo(index);
+    }
+    
+    
+
+
     return <div className="todo-list-item">
         {    todoUpdatingStatuses[index]
             ? <input
