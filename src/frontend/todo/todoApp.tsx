@@ -95,15 +95,15 @@ export class TodoApp extends React.Component {
         const words = ['prohibited', 'forbidden', 'banned'];
 
         // Validación de longitud mínima y máxima
-        if (this.updatedTodoText.length < min || this.updatedTodoText.length > max) {
+        if (newText.length < min || newText.length > max) {
             alert(`Error: The todo text must be between ${min} and ${max} characters long.`);
-        } else if (/[^a-zA-Z0-9\s]/.test(this.updatedTodoText)) {
+        } else if (/[^a-zA-Z0-9\s]/.test(newText)) {
             // Validación de caracteres especiales
             alert('Error: The todo text can only contain letters, numbers, and spaces.');
         } else {
             // Validación de palabras prohibidas
             let temp1 = false;
-            for (let word of this.updatedTodoText.split(/\s+/)) {
+            for (let word of newText.split(/\s+/)) {
                 if (words.includes(word)) {
                     alert(`Error: The todo text cannot include the prohibited word "${word}"`);
                     temp1 = true;
@@ -115,7 +115,7 @@ export class TodoApp extends React.Component {
                 // Validación de texto repetido (excluyendo el índice actual)
                 let temp2 = false;
                 for (let i = 0; i < this.todoList.length; i++) {
-                    if (i !== index && this.todoList[i].text === this.updatedTodoText) {
+                    if (i !== index && this.todoList[i].text === newText) {
                         temp2 = true;
                         break;
                     }
@@ -128,7 +128,7 @@ export class TodoApp extends React.Component {
                     fetch(`http://localhost:3000/api/todos/${this.todoList[index].id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ text: this.updatedTodoText, completed: this.todoList[index].completed }),
+                        body: JSON.stringify({ text: newText, completed: this.todoList[index].completed }),
                     })
                         .then(response => response.json())
                         .then(data => {
