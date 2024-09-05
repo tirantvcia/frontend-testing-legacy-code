@@ -59,7 +59,7 @@ export function TodoItem({
             Delete Todo
         </button>
 
-        <button className="todo-button todo-update-button" onClick={() => updateTodo(index)}>
+        <button className="todo-button todo-update-button" onClick={handleUpdate}>
             Update Todo
         </button>
     </div>;
