@@ -9,7 +9,7 @@ type TodoItemProps = {
     onEdit: (index: number, text: string) => void,
     toggleComplete: (index: number) => void,
     deleteTodo: (index: number) => void,
-    updateTodo: (index: number) => void,
+    updateTodo: (index: number, todo: Todo, newText: string) => void,
 }
 
 type TodoItemState = {
@@ -39,7 +39,7 @@ export function TodoItem({
     }
     const handleUpdate = (): void => {
         setState({...state, isEditing: false});
-        updateTodo(index);
+        updateTodo(index, todo, state.newText);
     }
     
     
