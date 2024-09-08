@@ -4,9 +4,6 @@ import { Todo } from "./todoApp";
 type TodoItemProps = {
     index: number,
     todo: Todo,
-    todoUpdatingStatuses: boolean[],
-    handleUpdateTextChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    onEdit: (index: number, text: string) => void,
     toggleComplete: (index: number) => void,
     deleteTodo: (index: number) => void,
     updateTodo: (index: number, todo: Todo, newText: string) => void,
@@ -20,9 +17,6 @@ type TodoItemState = {
 export function TodoItem({
     index,
     todo,
-    todoUpdatingStatuses,
-    handleUpdateTextChange,
-    onEdit,
     toggleComplete,
     deleteTodo,
     updateTodo

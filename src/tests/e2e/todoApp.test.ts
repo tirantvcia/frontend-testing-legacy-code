@@ -62,7 +62,7 @@ describe('TodoList App', () => {
     cy.contains('.todo-list-item', todoText).should('not.exist');
   })
 
-  xit('should be able to update a todo', () => {
+  it('should be able to update a todo', () => {
     cy.get('.todo-input').type(todoText);
     cy.get('.add-todo-button').click();
 
@@ -73,7 +73,7 @@ describe('TodoList App', () => {
     
   })
 
-  it('should be able to update a todo, miguel version', () => {
+  xit('should be able to update a todo, miguel version', () => {
     cy.get('.todo-input').type(todoText);
     cy.get('.add-todo-button').click();
 

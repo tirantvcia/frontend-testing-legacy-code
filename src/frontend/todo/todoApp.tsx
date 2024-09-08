@@ -236,9 +236,6 @@ export class TodoApp extends React.Component {
 
                     <TodoItem index={index} 
                         todo = {todo}
-                        todoUpdatingStatuses = {this.todoUpdatingStatus}
-                        handleUpdateTextChange = {this.handleUpdateInputChange}
-                        onEdit = {this.onEdit}
                         toggleComplete = {this.toggleComplete}
                         deleteTodo = {this.deleteTodo}
                         updateTodo = {this.updateTodo}/>
