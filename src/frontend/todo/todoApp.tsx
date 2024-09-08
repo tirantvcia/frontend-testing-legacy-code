@@ -11,10 +11,9 @@ export class TodoApp extends React.Component {
     todoList: Todo[] = [];
 
     todoText = '';
-    updatedTodoText = '';
     numberOfCompleted = 0;
     currentFilter = 'all' as TodoFilter;
-    todoUpdatingStatus: boolean[] = [];
+
 
     constructor(props) {
         super(props);
@@ -26,9 +25,6 @@ export class TodoApp extends React.Component {
             .then(response => response.json())
             .then(data => {
                 this.todoList = data;
-                for (let i = 0; i < this.todoList.length; i++) {
-                    this.todoUpdatingStatus.push(false);
-                }
                 this.forceUpdate();
             })
             .catch(error => console.log(error));
@@ -189,16 +185,8 @@ export class TodoApp extends React.Component {
         return filteredTodos;
     }
 
-    onEdit = (index, text): void => {
-        this.updatedTodoText = text;
-        this.todoUpdatingStatus[index] = true;
-        this.forceUpdate();
-    }
 
-    close(index) {
-        this.todoUpdatingStatus[index] = false;
-        this.forceUpdate();
-    }
+
 
     handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const text = event.target.value;
@@ -206,11 +194,6 @@ export class TodoApp extends React.Component {
         this.forceUpdate();
     }
 
-    handleUpdateInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        const text = event.target.value;
-        this.updatedTodoText = text;
-        this.forceUpdate();
-    }
 
     render() {
         const todosToShow = this.getFilteredTodos();
