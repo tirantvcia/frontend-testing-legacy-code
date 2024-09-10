@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { createTodo } from '../../../domain/todo';
+import { createTodo, Todo, updateTodo } from '../../../domain/todo';
 
 //`Error: The todo text must be between ${min} and ${max} characters long.`
 //'Error: The todo text can only contain letters, numbers, and spaces.'
@@ -48,7 +48,22 @@ describe('The Todo Model', ()=>{
         });
                 
     });
+    describe('When creating a new Todo', ()=>{
+        it('should update a todo when text is valid', ()=>{
+            const text = 'A valid text with more than 3 valid words';
+            const todo = createTodo(text);
+            
+            const updatedText = 'A new valid text with more than 3 valid words';
+            const updatedTodo: Todo = updateTodo(todo, updatedText);
+            
+            expect(updatedTodo.id).toBe(todo.id);
+            expect(updatedTodo.text).toMatch(updatedText);
+            expect(updatedTodo.completed).toBe(false);
+
+        });      
+    });
 });
+
 
 
 

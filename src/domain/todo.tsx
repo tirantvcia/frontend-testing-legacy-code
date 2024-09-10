@@ -18,6 +18,19 @@ export function createTodo(text: string): any {
     };
 }
 
+export function updateTodo(todo: Todo, updatedText: string) {
+    ensureThatHasValidLength(updatedText);
+    ensureThatContainsOnlyAlphanumeric(updatedText);
+    ensureThatNotContainsForbbidenWords(updatedText);
+
+    return {
+        id: todo.id,
+        text: updatedText,
+        completed: false
+    };
+}
+
+
 function ensureThatNotContainsForbbidenWords(text: string) {
     const forbiddenWords = ['prohibited', 'forbidden', 'banned'];
     const textContainsForbbidenWords = (word: string): boolean => text.includes(word);
