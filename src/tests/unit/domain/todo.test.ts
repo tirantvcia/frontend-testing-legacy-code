@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid';
+import { createTodo } from '../../../domain/todo';
 
 //`Error: The todo text must be between ${min} and ${max} characters long.`
 //'Error: The todo text can only contain letters, numbers, and spaces.'
@@ -48,28 +49,7 @@ describe('The Todo Model', ()=>{
                 
     });
 });
-function createTodo(text: string): any {
-    if(!text || text.length < 3 || text.length > 100) {
-        throw new Error(`Error: The todo text must be between 3 and 100 characters long.`)
-    }
-    const regex = /^[a-zA-Z0-9 ]+$/;
-    const textMatchValidCharacters = text.match(regex);
-    if(!textMatchValidCharacters) {
-        throw new Error(`Error: The todo text can only contain letters, numbers, and spaces.`)
-    }
-    const forbiddenWords = ['prohibited', 'forbidden', 'banned'];
-    const textContainsForbbidenWords = (word: string): boolean => text.includes(word);
-    if (forbiddenWords.some(textContainsForbbidenWords) ) {
-            throw new Error(`Error: The todo text cannot include the prohibited word`)
-    }
-    
-    return {
-        id: uuid(),
-        text,
-        completed:false
 
-    }
-}
 
 
 
