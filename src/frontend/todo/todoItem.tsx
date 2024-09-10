@@ -1,5 +1,5 @@
 import React from "react";
-import { Todo } from "./todoApp";
+import { Todo } from "../../domain/todo";
 
 type TodoItemProps = {
     index: number,

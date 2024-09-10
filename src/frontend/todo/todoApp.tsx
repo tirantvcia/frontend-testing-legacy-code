@@ -1,6 +1,7 @@
 import * as React from "react";
 import { v4 as uuid } from 'uuid';
 import { TodoItem } from "./todoItem";
+import { Todo } from "../../domain/todo";
 
 
 
@@ -231,9 +232,4 @@ export class TodoApp extends React.Component {
 
 }
 
-export type Todo = {
-    id: string,
-    text: string,
-    completed: boolean;
-}
 
