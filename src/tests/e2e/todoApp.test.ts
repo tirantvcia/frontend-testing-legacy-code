@@ -96,7 +96,38 @@ describe('TodoList App', () => {
     })
     cy.get('.todo-list-item').should('not.exist')
   })
+  it('should be not able to add a todo with text is not alphanumeric', ()=> {
+    cy.get('.todo-input').type('A not valid text with special characters |@#%&')
+    cy.get('.add-todo-button').click()
 
+    cy.on('window:alert', (str)=>{
+      expect(str).to.equal('Error: The todo text can only contain letters, numbers, and spaces.')
+    })
+    cy.get('.todo-list-item').should('not.exist')
+  })
+  it('should be not able to add a todo with text contains a prohibited word', ()=> {
+    cy.get('.todo-input').type('A not valid text with prohibited and forbidden words')
+    cy.get('.add-todo-button').click()
 
+    cy.on('window:alert', (str)=>{
+      expect(str).to.contains('Error: The todo text cannot include the prohibited word')
+    })
+    cy.get('.todo-list-item').should('not.exist')
+  })
+  it('should be not able to add a todo with text contains a prohibited word', ()=> {
+    cy.get('.todo-input').type(todoText);
+    cy.get('.add-todo-button').click();
+    cy.contains('.todo-list-item', todoText).should('exist');
+    
+    cy.get('.edit-todo-button').click()
+    cy.get('.todo-edit-input').clear().type('s')
+    cy.get('.todo-update-button').click()
+
+    cy.on('window:alert', (str)=>{
+      expect(str).to.contains('Error: The todo text must be between 3 and 100 characters long.')
+    })
+    cy.get('.todo-list-item').should('contain',todoText)
+    cy.get('.todo-delete-button').click()
+  })  
 });
 
