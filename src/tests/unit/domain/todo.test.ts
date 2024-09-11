@@ -48,7 +48,7 @@ describe('The Todo Model', ()=>{
         });
                 
     });
-    describe('When creating a new Todo', ()=>{
+    describe('When updating a new Todo', ()=>{
         it('should update a todo when text is valid', ()=>{
             const text = 'A valid text with more than 3 valid words';
             const todo = createTodo(text);
@@ -60,7 +60,50 @@ describe('The Todo Model', ()=>{
             expect(updatedTodo.text).toMatch(updatedText);
             expect(updatedTodo.completed).toBe(false);
 
-        });      
+        });   
+        it('should throw an error when text is less minimum length', ()=>{
+            const text = 'A valid text with more than 3 valid words';
+            const todo = createTodo(text);
+            const updatedText = 'a';
+            expect(()=> updateTodo(todo, updatedText)).toThrowError(`Error: The todo text must be between 3 and 100 characters long.`);
+
+        });
+        it('should throw an error when text is more than maximun length', ()=>{
+            const text = 'A valid text with more than 3 valid words';
+            const todo = createTodo(text);
+            const updatedText = 'a'.repeat(101);
+            expect(()=> updateTodo(todo, updatedText)).toThrowError(`Error: The todo text must be between 3 and 100 characters long.`);
+
+        });       
+        it('should throw an error when text is empty', ()=>{
+            const text = 'A valid text with more than 3 valid words';
+            const todo = createTodo(text);
+            const updatedText = '';
+            expect(()=> updateTodo(todo, updatedText)).toThrowError(`Error: The todo text must be between 3 and 100 characters long.`);
+
+        });            
+        it('should throw an error when text is null', ()=>{
+            const text = 'A valid text with more than 3 valid words';
+            const todo = createTodo(text);
+            const updatedText =  null;
+            expect(()=> updateTodo(todo, updatedText)).toThrowError(`Error: The todo text must be between 3 and 100 characters long.`);
+
+        });         
+        it('should throw an error when text is not alphanumeric', ()=>{
+            const text = 'A valid text with more than 3 valid words';
+            const todo = createTodo(text);
+            const updatedText =  'A not valid text with special characters |@#%&';
+            expect(()=> updateTodo(todo, updatedText)).toThrowError(`Error: The todo text can only contain letters, numbers, and spaces.`);
+
+        });
+        it('should throw an error when text contains a prohibited word', ()=>{
+            const text = 'A valid text with more than 3 valid words';
+            const todo = createTodo(text);
+            const updatedText = 'A not valid text with prohibited and forbidden words';
+            expect(()=> updateTodo(todo, updatedText)).toThrowError(`Error: The todo text cannot include the prohibited word`);
+
+        });
+
     });
 });
 
