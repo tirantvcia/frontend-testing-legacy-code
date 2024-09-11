@@ -87,6 +87,15 @@ describe('TodoList App', () => {
     cy.contains('.todo-list-item', todoText).should('not.exist');
     
   })
+  it('should be not able to add a todo with invalid length', ()=> {
+    cy.get('.todo-input').type('a')
+    cy.get('.add-todo-button').click()
+
+    cy.on('window:alert', (str)=>{
+      expect(str).to.equal('Error: The todo text must be between 3 and 100 characters long.')
+    })
+    cy.get('.todo-list-item').should('not.exist')
+  })
 
 
 });
