@@ -114,7 +114,7 @@ describe('TodoList App', () => {
     })
     cy.get('.todo-list-item').should('not.exist')
   })
-  it('should be not able to add a todo with text contains a prohibited word', ()=> {
+  it('should be not able to update a todo with invalid length text', ()=> {
     cy.get('.todo-input').type(todoText);
     cy.get('.add-todo-button').click();
     cy.contains('.todo-list-item', todoText).should('exist');
@@ -129,5 +129,20 @@ describe('TodoList App', () => {
     cy.get('.todo-list-item').should('contain',todoText)
     cy.get('.todo-delete-button').click()
   })  
+  it('should be not able to add a todo with text on Todo List', ()=> {
+    cy.get('.todo-input').type(todoText);
+    cy.get('.add-todo-button').click();
+    cy.contains('.todo-list-item', todoText).should('exist');
+    
+    cy.get('.edit-todo-button').click()
+    cy.get('.todo-edit-input').clear().type(todoText)
+    cy.get('.todo-update-button').click()
+
+    cy.on('window:alert', (str)=>{
+      expect(str).to.contains('Error: The todo text is already in the todoList.')
+    })
+    cy.get('.todo-list-item').should('contain',todoText)
+    cy.get('.todo-delete-button').click()
+  })    
 });
 

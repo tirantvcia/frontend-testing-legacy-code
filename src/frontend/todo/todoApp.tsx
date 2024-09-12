@@ -1,7 +1,7 @@
 import * as React from "react";
 import { v4 as uuid } from 'uuid';
 import { TodoItem } from "./todoItem";
-import { createTodo, Todo } from "../../domain/todo";
+import { createTodo, Todo, updateTodo } from "../../domain/todo";
 
 
 
@@ -74,57 +74,27 @@ export class TodoApp extends React.Component {
     }
 
     updateTodo = (index: number, previousTodo: Todo, newText: string) => {
-        const min = 3; // Longitud mínima del texto
-        const max = 100; // Longitud máxima del texto
-        const words = ['prohibited', 'forbidden', 'banned'];
 
-        // Validación de longitud mínima y máxima
-        if (newText.length < min || newText.length > max) {
-            alert(`Error: The todo text must be between ${min} and ${max} characters long.`);
-            return;
-        }
-        if (/[^a-zA-Z0-9\s]/.test(newText)) {
-            // Validación de caracteres especiales
-            alert('Error: The todo text can only contain letters, numbers, and spaces.');
-            return;
-        }
-        // Validación de palabras prohibidas
-        let hasForbbidenWords = false;
-        for (let word of newText.split(/\s+/)) {
-            if (words.includes(word)) {
-                alert(`Error: The todo text cannot include the prohibited word "${word}"`);
-                hasForbbidenWords = true;
-                break;
-            }
-        }
+        try {
+            const updatedTodo = updateTodo(previousTodo, newText);
 
-        if (hasForbbidenWords) {
-            return;
-        }
-        // Validación de texto repetido (excluyendo el índice actual)
-        let temp2 = false;
-        for (let i = 0; i < this.todoList.length; i++) {
-            if (i !== index && this.todoList[i].text === newText) {
-                temp2 = true;
-                break;
-            }
-        }
+            this.ensureThatValidTextIsNotInTodoList(index, newText);
 
-        if (temp2) {
-            alert('Error: The todo text is already in the todoList.');
-        } else {
+
             // Si pasa todas las validaciones, actualizar el "todo"
-            fetch(`http://localhost:3000/api/todos/${this.todoList[index].id}`, {
+            fetch(`http://localhost:3000/api/todos/${updatedTodo.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: newText, completed: this.todoList[index].completed }),
+                body: JSON.stringify({ text: updatedTodo.text, completed: updatedTodo.completed }),
             })
                 .then(response => response.json())
                 .then(data => {
-                    this.todoList[index] = data;
-                    this.close(index);
+                    this.todoList[index] = updatedTodo;
                     this.forceUpdate();
                 });
+
+        } catch (e) {
+            alert(e.message);
         }
 
 
@@ -158,6 +128,15 @@ export class TodoApp extends React.Component {
             })
     }
 
+
+    private ensureThatValidTextIsNotInTodoList(index: number, newText: string) {
+        let isTextInTodoList = false;
+        for (let i = 0; i < this.todoList.length; i++) {
+            if (i !== index && this.todoList[i].text === newText) {
+                throw new Error(`Error: The todo text is already in the todoList.`);
+            }
+        }
+    }
 
     setFilter(filter) {
         this.currentFilter = filter;
