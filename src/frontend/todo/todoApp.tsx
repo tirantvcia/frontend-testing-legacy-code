@@ -1,7 +1,7 @@
 import * as React from "react";
 import { v4 as uuid } from 'uuid';
 import { TodoItem } from "./todoItem";
-import { Todo } from "../../domain/todo";
+import { createTodo, Todo } from "../../domain/todo";
 
 
 
@@ -34,61 +34,41 @@ export class TodoApp extends React.Component {
 
 
     addTodo() {
-        const min = 3; // Longitud mínima del texto
-        const max = 100; // Longitud máxima del texto
-        const forbidden = ['prohibited', 'forbidden', 'banned'];
-
-        // Validación de longitud mínima y máxima
-        if (this.todoText.length < min || this.todoText.length > max) {
-            alert(`Error: The todo text must be between ${min} and ${max} characters long.`);
-            return;
-        }
-        if (/[^a-zA-Z0-9\s]/.test(this.todoText)) {
-            // Validación de caracteres especiales
-            alert('Error: The todo text can only contain letters, numbers, and spaces.');
-            return;
-
-        }
-        // Validación de palabras prohibidas
-        const words = this.todoText.split(/\s+/);
-        let foundForbiddenWord = false;
-        for (let word of words) {
-            if (forbidden.includes(word)) {
-                alert(`Error: The todo text cannot include the prohibited word "${word}"`);
-                foundForbiddenWord = true;
-                break;
+        try {
+            const newTodo = createTodo(this.todoText);
+            // Validación de texto repetido
+            let isRepeated = false;
+            for (let i = 0; i < this.todoList.length; i++) {
+                if (this.todoList[i].text === this.todoText) {
+                    isRepeated = true;
+                    break;
+                }
             }
-        }
 
-        if (foundForbiddenWord) {
-            return;
-        }
-        // Validación de texto repetido
-        let isRepeated = false;
-        for (let i = 0; i < this.todoList.length; i++) {
-            if (this.todoList[i].text === this.todoText) {
-                isRepeated = true;
-                break;
+            if (isRepeated) {
+                alert('Error: The todo text is already in the todoList.');
+                return;
             }
+            // Si pasa todas las validaciones, agregar el "todo"
+            fetch('http://localhost:3000/api/todos/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newTodo),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    this.todoList.push(data);
+                    this.todoText = '';
+                    this.forceUpdate();
+                });
+
+
+        } catch (e) {
+            alert(e.message);
+            
         }
 
-        if (isRepeated) {
-            alert('Error: The todo text is already in the todoList.');
-            return;
-        }
-        // Si pasa todas las validaciones, agregar el "todo"
-        fetch('http://localhost:3000/api/todos/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: uuid(), text: this.todoText, completed: false }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.todoList.push(data);
-                this.todoText = '';
-                this.forceUpdate();
-            });
-
+ 
 
 
     }
