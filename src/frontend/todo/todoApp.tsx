@@ -73,9 +73,10 @@ export class TodoApp extends React.Component {
 
     }
 
-    updateTodo = (index: number, previousTodo: Todo, newText: string) => {
+    updateTodo = (previousTodo: Todo, newText: string) => {
 
         try {
+            const index = this.todoList.indexOf(previousTodo);
             const updatedTodo = updateTodo(previousTodo, newText);
 
             this.ensureThatValidTextIsNotInTodoList(index, newText);

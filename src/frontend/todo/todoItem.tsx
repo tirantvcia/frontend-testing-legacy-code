@@ -6,7 +6,7 @@ type TodoItemProps = {
     todo: Todo,
     toggleComplete: (index: number) => void,
     deleteTodo: (index: number) => void,
-    updateTodo: (index: number, todo: Todo, newText: string) => void,
+    updateTodo: (todo: Todo, newText: string) => void,
 }
 
 type TodoItemState = {
@@ -31,7 +31,7 @@ export function TodoItem({
     }
     const handleUpdate = (): void => {
         setState({...state, isEditing: false});
-        updateTodo(index, todo, state.newText);
+        updateTodo(todo, state.newText);
     }
     
     
