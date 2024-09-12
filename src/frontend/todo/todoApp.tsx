@@ -2,10 +2,8 @@ import * as React from "react";
 import { v4 as uuid } from 'uuid';
 import { TodoItem } from "./todoItem";
 import { createTodo, Todo, updateTodo } from "../../domain/todo";
+import { filterTodo, TodoFilter } from "../../domain/service/todoQueries";
 
-
-
-type TodoFilter = 'all' | 'completed' | 'incomplete';
 
 
 export class TodoApp extends React.Component {
@@ -144,19 +142,7 @@ export class TodoApp extends React.Component {
         this.forceUpdate();
     }
 
-    getFilteredTodos() {
-        const filteredTodos = [];
-        for (let i = 0; i < this.todoList.length; i++) {
-            if (
-                this.currentFilter === 'all' ||
-                (this.currentFilter === 'completed' && this.todoList[i].completed) ||
-                (this.currentFilter === 'incomplete' && !this.todoList[i].completed)
-            ) {
-                filteredTodos.push(this.todoList[i]);
-            }
-        }
-        return filteredTodos;
-    }
+
 
 
 
@@ -169,7 +155,7 @@ export class TodoApp extends React.Component {
 
 
     render() {
-        const todosToShow = this.getFilteredTodos();
+        const todosToShow = filterTodo(this.currentFilter, this.todoList);
 
         return (
             <div className="todo-app-container">
