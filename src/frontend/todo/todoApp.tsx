@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { TodoItem } from "./todoItem";
 import { createTodo, Todo, updateTodo } from "../../domain/todo";
 import { filterTodo, TodoFilter } from "../../domain/service/todoQueries";
+import { TodoApiRepository } from "../infrastructure/TodoApiRepository";
 
 
 
@@ -12,6 +13,10 @@ export class TodoApp extends React.Component {
     todoText = '';
     numberOfCompleted = 0;
     currentFilter = 'all' as TodoFilter;
+    
+
+
+    todoRepository = new TodoApiRepository('http://localhost:3000/api/todos/');
 
 
     constructor(props) {
@@ -20,8 +25,7 @@ export class TodoApp extends React.Component {
     }
 
     private initialize() {
-        fetch('http://localhost:3000/api/todos/')
-            .then(response => response.json())
+        this.todoRepository.getAll()
             .then(data => {
                 this.todoList = data;
                 this.forceUpdate();
@@ -48,12 +52,7 @@ export class TodoApp extends React.Component {
                 return;
             }
             // Si pasa todas las validaciones, agregar el "todo"
-            fetch('http://localhost:3000/api/todos/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newTodo),
-            })
-                .then(response => response.json())
+            this.todoRepository.add(newTodo)
                 .then(data => {
                     this.todoList.push(data);
                     this.todoText = '';
@@ -81,12 +80,7 @@ export class TodoApp extends React.Component {
 
 
             // Si pasa todas las validaciones, actualizar el "todo"
-            fetch(`http://localhost:3000/api/todos/${updatedTodo.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: updatedTodo.text, completed: updatedTodo.completed }),
-            })
-                .then(response => response.json())
+            this.todoRepository.update(updatedTodo)
                 .then(data => {
                     this.todoList[index] = updatedTodo;
                     this.forceUpdate();
@@ -102,7 +96,7 @@ export class TodoApp extends React.Component {
 
 
     deleteTodo = index => {
-        fetch(`http://localhost:3000/api/todos/${this.todoList[index].id}`, { method: 'DELETE' })
+        this.todoRepository.delete(this.todoList[index])
             .then(() => {
                 if (this.todoList[index].completed) {
                     this.numberOfCompleted--;
