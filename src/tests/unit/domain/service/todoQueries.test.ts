@@ -1,4 +1,4 @@
-import { filterTodo } from "../../../../domain/service/todoQueries"
+import { ensureThatTodoIsNotRepeated, filterTodo } from "../../../../domain/service/todoQueries"
 
 describe('The Todo Queries', () => {
     const todoList = [
@@ -29,6 +29,16 @@ describe('The Todo Queries', () => {
             ]);
 
         })      
+    })
+    describe('when ensuring a todo is not repeated', () => {
+        it('shoulld throw an error if todo text is already in the collection', () => {
+            
+            expect(()=> ensureThatTodoIsNotRepeated('Todo 1', todoList)).toThrowError(`Error: The todo text is already in the todoList.`);
+        })
+        it('shoulld not throw an error if todo text is not in the collection', () => {
+            
+            expect(()=> ensureThatTodoIsNotRepeated('Todo 5', todoList)).not.toThrow();
+        })
     })
 
 })

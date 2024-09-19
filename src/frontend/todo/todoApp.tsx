@@ -2,9 +2,8 @@ import * as React from "react";
 import { v4 as uuid } from 'uuid';
 import { TodoItem } from "./todoItem";
 import { createTodo, Todo, updateTodo } from "../../domain/todo";
-import { filterTodo, TodoFilter } from "../../domain/service/todoQueries";
+import { ensureThatTodoIsNotRepeated, filterTodo, TodoFilter } from "../../domain/service/todoQueries";
 import { TodoApiRepository } from "../infrastructure/TodoApiRepository";
-
 
 
 export class TodoApp extends React.Component {
@@ -38,19 +37,8 @@ export class TodoApp extends React.Component {
     addTodo() {
         try {
             const newTodo = createTodo(this.todoText);
-            // Validación de texto repetido
-            let isRepeated = false;
-            for (let i = 0; i < this.todoList.length; i++) {
-                if (this.todoList[i].text === this.todoText) {
-                    isRepeated = true;
-                    break;
-                }
-            }
+            ensureThatTodoIsNotRepeated(this.todoText, this.todoList);
 
-            if (isRepeated) {
-                alert('Error: The todo text is already in the todoList.');
-                return;
-            }
             // Si pasa todas las validaciones, agregar el "todo"
             this.todoRepository.add(newTodo)
                 .then(data => {
@@ -76,7 +64,7 @@ export class TodoApp extends React.Component {
             const index = this.todoList.indexOf(previousTodo);
             const updatedTodo = updateTodo(previousTodo, newText);
 
-            this.ensureThatValidTextIsNotInTodoList(index, newText);
+            ensureThatTodoIsNotRepeated(newText, this.todoList);
 
 
             // Si pasa todas las validaciones, actualizar el "todo"
@@ -122,14 +110,7 @@ export class TodoApp extends React.Component {
     }
 
 
-    private ensureThatValidTextIsNotInTodoList(index: number, newText: string) {
-        let isTextInTodoList = false;
-        for (let i = 0; i < this.todoList.length; i++) {
-            if (i !== index && this.todoList[i].text === newText) {
-                throw new Error(`Error: The todo text is already in the todoList.`);
-            }
-        }
-    }
+
 
     setFilter(filter) {
         this.currentFilter = filter;

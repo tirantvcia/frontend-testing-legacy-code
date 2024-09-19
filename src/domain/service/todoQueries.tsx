@@ -13,4 +13,13 @@ export function filterTodo(currentFilter: TodoFilter, todoList: Todo[]) {
 } 
 
 export type TodoFilter = 'all' | 'completed' | 'incomplete';
+export function ensureThatTodoIsNotRepeated(newText: string, todoList: Todo[]) {
+    let isTextInTodoList = false;
+    todoList.forEach(todo => {
+        if (todo.text === newText) {
+            throw new Error(`Error: The todo text is already in the todoList.`);
+        }
+    });
+
+}
 
