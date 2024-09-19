@@ -25,14 +25,16 @@ export class TodoApp extends React.Component {
 
     private initialize() {
         this.todoRepository.getAll()
-            .then(data => {
-                this.todoList = data;
-                this.forceUpdate();
-            })
+            .then(this.handleGetAllSuccess)
             .catch(error => console.log(error));
     }
 
 
+
+    private handleGetAllSuccess = data => {
+        this.todoList = data;
+        this.forceUpdate();
+    }
 
     addTodo() {
         try {
