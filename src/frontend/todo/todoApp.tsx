@@ -4,6 +4,7 @@ import { TodoItem } from "./todoItem";
 import { createTodo, Todo, updateTodo } from "../../domain/todo";
 import { ensureThatTodoIsNotRepeated, filterTodo, TodoFilter } from "../../domain/service/todoQueries";
 import { TodoApiRepository } from "../infrastructure/TodoApiRepository";
+import _ from "cypress/types/lodash";
 
 
 export class TodoApp extends React.Component {
@@ -43,44 +44,40 @@ export class TodoApp extends React.Component {
 
             // Si pasa todas las validaciones, agregar el "todo"
             this.todoRepository.add(newTodo)
-                .then(data => {
-                    this.todoList.push(data);
-                    this.todoText = '';
-                    this.forceUpdate();
-                });
-
+                .then(this.handleAddSuccess);
 
         } catch (e) {
             alert(e.message);
 
         }
 
+    }
 
-
-
+    private handleAddSuccess = (data: Todo) => {
+        this.todoList.push(data);
+        this.todoText = '';
+        this.forceUpdate();
     }
 
     updateTodo = (previousTodo: Todo, newText: string) => {
 
         try {
-            const index = this.todoList.indexOf(previousTodo);
             const updatedTodo = updateTodo(previousTodo, newText);
-
             ensureThatTodoIsNotRepeated(newText, this.todoList);
-
-
             // Si pasa todas las validaciones, actualizar el "todo"
             this.todoRepository.update(updatedTodo)
-                .then(data => {
-                    this.todoList[index] = updatedTodo;
-                    this.forceUpdate();
-                });
+                .then(_ => this.handleUpdateSuccess(updatedTodo));
 
         } catch (e) {
             alert(e.message);
         }
 
+    }
 
+    private handleUpdateSuccess(todo: { id: string; text: string; completed: boolean; }) {
+        const index = this.todoList.findIndex(item => item.id === todo.id);
+        this.todoList[index] = todo;
+        this.forceUpdate();
     }
 
 
