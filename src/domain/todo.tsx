@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid';
+import { Todo } from './todo';
 
 export type Todo = {
     readonly id: string;
@@ -51,5 +52,11 @@ function ensureThatHasValidLength(text: string) {
     if (!text || text.length < 3 || text.length > 100) {
         throw new Error(`Error: The todo text must be between 3 and 100 characters long.`);
     }
+}
+export function toggleTodoCompleted(todo: Todo): Todo {
+    return {
+        ...todo,
+        completed: !todo.completed
+    };
 }
 

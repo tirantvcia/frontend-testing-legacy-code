@@ -4,8 +4,8 @@ import { Todo } from "../../domain/todo";
 type TodoItemProps = {
     index: number,
     todo: Todo,
-    toggleComplete: (index: number) => void,
-    deleteTodo: (index: number) => void,
+    toggleComplete: (todo: Todo) => void,
+    deleteTodo: (todo: Todo) => void,
     updateTodo: (todo: Todo, newText: string) => void,
 }
 
@@ -45,10 +45,10 @@ export function TodoItem({
                 defaultValue={todo.text} // Asumiendo que inputData se usa para la edición
                 onChange={handleTextChange} />
             : <p className="todo-text" style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>{todo.text} <button className="todo-button edit-todo-button" onClick={handleEdit}>Edit</button></p>}
-        <button className="todo-button todo-mark-button" onClick={() => toggleComplete(index)}>
+        <button className="todo-button todo-mark-button" onClick={() => toggleComplete(todo)}>
             {todo.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
         </button>
-        <button className="todo-button todo-delete-button" onClick={() => deleteTodo(index)}>
+        <button className="todo-button todo-delete-button" onClick={() => deleteTodo(todo)}>
             Delete Todo
         </button>
 
